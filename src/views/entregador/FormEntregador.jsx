@@ -2,6 +2,13 @@ import React from "react";
 import InputMask from 'react-input-mask';
 import { Button, Container, Divider, Form, Icon, FormSelect, FormRadio} from 'semantic-ui-react';
 
+const UFs = [
+    { key: 'PE', text: 'PE', value: 'PE' },
+    { key: 'MT', text: 'MT', value: 'MT' },
+    { key: 'SP', text: 'SP', value: 'SP' },
+    { key: 'RJ', text: 'RJ', value: 'RJ' },
+]
+
 export default function FormCliente () {
 
     return (
@@ -45,7 +52,13 @@ export default function FormCliente () {
                                     fluid
                                     label="RG"
                                     width={"8"}
-                                />
+                                >
+                                    <InputMask
+                                        required
+                                        mask="99999-999"
+                                    />
+                                </Form.Input>
+                                
 
                             </Form.Group>
                             
@@ -134,6 +147,7 @@ export default function FormCliente () {
                             <FormSelect
                                 fluid
                                 label='UF'
+                                options={UFs}
                             />
 
                             <Form.Input

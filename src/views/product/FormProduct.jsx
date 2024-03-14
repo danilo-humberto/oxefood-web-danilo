@@ -1,8 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import InputMask from 'react-input-mask';
 import { Button, Container, Divider, Form, Icon, FormTextArea } from 'semantic-ui-react';
+import axios from "axios";
 
 export default function FormCliente () {
+
+    const [codigo, setCodigo] = useState();
+    const [titulo, setTitulo] = useState();
+    const [descricao, setDescricao] = useState();
+    const [valorUnitario, setValorUnitario] = useState();
+    const [tempoEntregaMinimo, setTempoEntregaMinimo] = useState();
+    const [tempoEntregaMaximo, setTempoEntregaMaximo] = useState();
+
+    function salvar() {
+
+		let produtoRequest = {
+            codigo: codigo,
+            titulo: titulo,
+            descricao: descricao,
+            valorUnitario: valorUnitario,
+            tempoEntregaMinimo: tempoEntregaMinimo,
+            tempoEntregaMaximo: tempoEntregaMaximo
+		}
+	
+		axios.post("http://localhost:8080/api/produto", produtoRequest)
+		.then((response) => {
+		    console.log('Cliente cadastrado com sucesso.')
+            setCodigo('')
+            setTitulo('')
+            setDescricao('')
+            setValorUnitario('')
+            setTempoEntregaMinimo('')
+            setTempoEntregaMaximo('')
+		})
+		.catch((error) => {
+		     console.log('Erro ao incluir o um cliente.')
+		})
+	}
 
     return (
 
@@ -28,6 +62,8 @@ export default function FormCliente () {
                                     label='Título'
                                     maxLength="100"
                                     placeholder="Informe o título do produto"
+                                    value={titulo}
+                                    onChange={e => setTitulo(e.target.value)}
                                 />
 
                                 <Form.Input
@@ -36,6 +72,8 @@ export default function FormCliente () {
                                     label='Código do Produto'
                                     placeholder="Informe o código do produto"
                                     width={"8"}
+                                    value={codigo}
+                                    onChange={e => setCodigo(e.target.value)}
                                 />
 
                             </Form.Group>
@@ -43,6 +81,8 @@ export default function FormCliente () {
                             <FormTextArea 
                                 label='Descrição' 
                                 placeholder='Informe a descrição do produto' 
+                                value={descricao}
+                                onChange={e => setDescricao(e.target.value)}
                             />
                             
                             <Form.Group>
@@ -51,7 +91,10 @@ export default function FormCliente () {
                                     required
                                     fluid
                                     label='Valor Unitário'
-                                    width={6}>
+                                    width={6}
+                                    value={valorUnitario}
+                                    onChange={e => setValorUnitario(e.target.value)}
+                                    >
                                 </Form.Input>
 
                                 <Form.Input
@@ -59,6 +102,8 @@ export default function FormCliente () {
                                     label='Tempo de Entrega Mínimo em Minutos'
                                     width={5}
                                     placeholder="30"
+                                    value={tempoEntregaMinimo}
+                                    onChange={e => setTempoEntregaMinimo(e.target.value)}
                                 />
                                         
                                 <Form.Input
@@ -66,6 +111,8 @@ export default function FormCliente () {
                                     label='Tempo de Entrega Máximo em Minutos'
                                     width={5}
                                     placeholder="40"
+                                    value={tempoEntregaMaximo}
+                                    onChange={e => setTempoEntregaMaximo(e.target.value)}
                                 />
                                
                             </Form.Group>
@@ -93,6 +140,7 @@ export default function FormCliente () {
                                 labelPosition='left'
                                 color='blue'
                                 floated='right'
+                                onClick={() => salvar()}
                             >
                                 <Icon name='save' />
                                 Salvar

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import InputMask from 'react-input-mask';
-import { Button, Container, Divider, Form, Icon, FormSelect, FormRadio} from 'semantic-ui-react';
+import { Button, Container, Divider, Form, Icon, FormSelect} from 'semantic-ui-react';
 import axios from "axios";
 
 const UFs = [
@@ -226,8 +226,9 @@ export default function FormCliente () {
                                 fluid
                                 label='UF'
                                 options={UFs}
+                                placeholder="Selecione"
                                 value={enderecoUf}
-                                onChange={e => setNome(e.target.value)}
+                                onChange={(e, {value}) => {setEnderecoUf(value)}}
                             />
 
                             <Form.Input
@@ -240,17 +241,16 @@ export default function FormCliente () {
                             <Form.Group inline>
                                 <label>Ativo:</label>
                                 <Form.Radio
-                                    checked
                                     label="Sim"
                                     name="radio"
-                                    value={ativo}
+                                    checked={ativo}
                                     onChange={() => setAtivo(true)}                                    
                                 />
 
                                 <Form.Radio
                                     label="Não"
                                     name="radio"
-                                    value={ativo}
+                                    checked={!ativo}
                                     onChange={() => setAtivo(false)}
                                 />
 

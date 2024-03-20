@@ -3,11 +3,12 @@ import './App.css';
 import FormCliente from './views/client/FormCliente';
 import FormProduct from './views/product/FormProduct';
 import FormEntregador from './views/entregador/FormEntregador'
+import Rotas from './Rotas';
 
 function App() {
   return (
     <div className="App">
-      <FormEntregador/>
+      <Rotas />
 
       <div style={{marginTop: '6%'}}>
        <Segment vertical color='grey' size='tiny' textAlign='center'>

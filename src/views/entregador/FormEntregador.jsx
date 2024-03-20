@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import InputMask from 'react-input-mask';
 import { Button, Container, Divider, Form, Icon, FormSelect} from 'semantic-ui-react';
 import axios from "axios";
+import MenuSistema from '../../MenuSistema';
 
 const UFs = [
     { key: 'PE', text: 'PE', value: 'PE' },
@@ -62,6 +63,8 @@ export default function FormCliente () {
     return (
 
         <div>
+
+            <MenuSistema />
 
             <div style={{marginTop: '3%'}}>
 

@@ -3,6 +3,7 @@ import InputMask from 'react-input-mask';
 import { Button, Container, Divider, Form, Icon, FormSelect} from 'semantic-ui-react';
 import axios from "axios";
 import MenuSistema from '../../MenuSistema';
+import { Link } from "react-router-dom";
 
 const UFs = [
     { key: 'PE', text: 'PE', value: 'PE' },
@@ -272,7 +273,7 @@ export default function FormCliente () {
                                 color='orange'
                             >
                                 <Icon name='reply' />
-                                Voltar
+                                <Link to={'/list-cliente'}>Listar</Link>
                             </Button>
                                 
                             <Button

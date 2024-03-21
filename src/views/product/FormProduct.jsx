@@ -3,6 +3,7 @@ import InputMask from 'react-input-mask';
 import { Button, Container, Divider, Form, Icon, FormTextArea } from 'semantic-ui-react';
 import axios from "axios";
 import MenuSistema from "../../MenuSistema";
+import { Link } from "react-router-dom";
 
 export default function FormCliente () {
 
@@ -133,7 +134,7 @@ export default function FormCliente () {
                                 color='orange'
                             >
                                 <Icon name='reply' />
-                                Listar
+                                <Link to={'/list-cliente'}>Listar</Link>
                             </Button>
                                 
                             <Button

@@ -35,7 +35,7 @@ export default function FormCliente () {
 
         <div>
 
-            <MenuSistema />
+            <MenuSistema tela={'cliente'}/>
 
             <div style={{marginTop: '3%'}}>
 

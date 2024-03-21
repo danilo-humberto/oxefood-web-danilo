@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Menu } from "semantic-ui-react";
 
-export default function MenuSistema(){
-
-    const [activeItem, setActiveItem] = useState();
+export default function MenuSistema(props){
 
     return(
         <>
@@ -12,32 +10,28 @@ export default function MenuSistema(){
                 
                 <Menu.Item
                     name='home'
-                    active={activeItem === 'home'}
-                    onClick={() => setActiveItem('home')}
+                    active={props.tela === 'home'}
                     as={Link}
                     to='/'
                 />
 
                 <Menu.Item
                     name='cliente'
-                    active={activeItem === 'cliente'}
-                    onClick={() => setActiveItem('cliente')}
+                    active={props.tela === 'cliente'}
                     as={Link}
                     to='/form-cliente'
                 />
 
                 <Menu.Item
                     name='produto'
-                    active={activeItem === 'produto'}
-                    onClick={() => setActiveItem('produto')}
+                    active={props.tela === 'produto'}
                     as={Link}
                     to='/form-produto'
                 />
 
                 <Menu.Item
                     name='entregador'
-                    active={activeItem === 'entregador'}
-                    onClick={() => setActiveItem('entregador')}
+                    active={props.tela === 'entregador'}
                     as={Link}
                     to='/form-entregador'
                 />

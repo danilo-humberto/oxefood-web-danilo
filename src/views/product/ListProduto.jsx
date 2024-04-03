@@ -17,12 +17,6 @@ export default function ListProduto() {
     });
   }
 
-  function formatarData(dataParam) {
-    if (dataParam === null || dataParam === "" || dataParam === undefined) {
-      return "";
-    }
-  }
-
   return (
     <div>
       <MenuSistema tela={"cliente"} />
@@ -76,7 +70,7 @@ export default function ListProduto() {
                         title="Clique aqui para editar os dados deste cliente"
                         icon
                       >
-                        <Icon name="edit" />
+                        <Link to="/form-produto" state={{id: produto.id}} style={{color: 'green'}}> <Icon name='edit' /> </Link>
                       </Button>{" "}
                       &nbsp;
                       <Button

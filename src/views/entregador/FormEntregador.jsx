@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import InputMask from 'react-input-mask';
-import { Button, Container, Divider, Form, Icon, FormSelect} from 'semantic-ui-react';
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import InputMask from 'react-input-mask';
+import { Link, useLocation } from "react-router-dom";
+import { Button, Container, Divider, Form, FormSelect, Icon } from 'semantic-ui-react';
 import MenuSistema from '../../MenuSistema';
-import { Link } from "react-router-dom";
 
 const UFs = [
     { key: 'PE', text: 'PE', value: 'PE' },
@@ -13,6 +13,10 @@ const UFs = [
 ]
 
 export default function FormCliente () {
+
+    const { state } = useLocation();
+    const [idEntregador, setIdEntregador] = useState();
+
 
     const [nome, setNome] = useState();
     const [cpf, setCpf] = useState();
@@ -30,6 +34,31 @@ export default function FormCliente () {
     const [enderecoUf, setEnderecoUf] = useState();
     const [enderecoComplemento, setEnderecoComplemento] = useState();
     const [ativo, setAtivo] = useState(true);
+
+    useEffect(() => {
+        if (state != null && state.id != null) {
+            axios.get("http://localhost:8080/api/entregador/" + state.id)
+            .then((response) => {
+                setIdEntregador(response.data.id)
+                setNome(response.data.nome)
+                setCpf(response.data.cpf)
+                setRg(response.data.rg)
+                setDataNascimento(response.data.dataNascimento)
+                setFoneCelular(response.data.foneCelular)
+                setFoneFixo(response.data.foneFixo)
+                setQtdEntregasRealizadas(response.data.qtdEntregasRealizadas)
+                setValorFrete(response.data.valorFrete)
+                setEnderecoRua(response.data.enderecoRua)
+                setEnderecoNumero(response.data.enderecoNumero)
+                setEnderecoBairro(response.data.enderecoBairro)
+                setEnderecoCidade(response.data.enderecoCidade)
+                setEnderecoCep(response.data.enderecoCep)
+                setEnderecoUf(response.data.enderecoUf)
+                setEnderecoComplemento(response.data.enderecoComplemento)
+                setAtivo(response.data.ativo)
+            })
+        }
+    }, [state])
 
     function salvar() {
 
@@ -52,13 +81,18 @@ export default function FormCliente () {
             ativo:ativo
         }
 	
-		axios.post("http://localhost:8080/api/entregador", entregadorRequest)
-		 .then((response) => {
-		     console.log('Cliente cadastrado com sucesso.')
-		})
-		 .catch((error) => {
-		      console.log('Erro ao incluir o um cliente.')
-		 })
+		if (idEntregador != null) { //Alteração:
+
+console.log(entregadorRequest)
+
+            axios.put("http://localhost:8080/api/entregador/" + idEntregador, entregadorRequest)
+            .then((response) => { console.log('Entregador alterado com sucesso.') })
+            .catch((error) => { console.log('Erro ao alterar um entregador.') })
+        } else { //Cadastro:
+            axios.post("http://localhost:8080/api/entregador", entregadorRequest)
+            .then((response) => { console.log('Entregador cadastrado com sucesso.') })
+            .catch((error) => { console.log('Erro ao incluir o entregador.') })
+        } 
 	}
 
     return (
@@ -71,7 +105,13 @@ export default function FormCliente () {
 
                 <Container textAlign='justified' >
 
-                    <h2> <span style={{color: 'darkgray'}}> Entregador &nbsp;<Icon name='angle double right' size="small" /> </span> Cadastro </h2>
+                { idEntregador === undefined &&
+                    <h2> <span style={{color: 'darkgray'}}> Entregador &nbsp;<Icon name='angle double right' size="small" /> </span> Cadastro</h2>
+                }
+
+                { idEntregador != undefined &&
+                    <h2> <span style={{color: 'darkgray'}}> Entregador &nbsp;<Icon name='angle double right' size="small" /> </span> Alteração</h2>
+                }
 
                     <Divider />
 
@@ -273,7 +313,7 @@ export default function FormCliente () {
                                 color='orange'
                             >
                                 <Icon name='reply' />
-                                <Link to={'/list-cliente'}>Listar</Link>
+                                <Link to={'/list-entregador'}>Listar</Link>
                             </Button>
                                 
                             <Button

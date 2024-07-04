@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import InputMask from 'react-input-mask';
 import { Button, Container, Divider, Form, Icon, FormTextArea } from 'semantic-ui-react';
 import axios from "axios";
 import MenuSistema from "../../MenuSistema";
@@ -9,7 +8,7 @@ export default function FormCliente () {
 
     const { state } = useLocation();
     const [idProduto, setIdProduto] = useState();
-
+    
 
     const [codigo, setCodigo] = useState();
     const [titulo, setTitulo] = useState();
@@ -70,7 +69,7 @@ export default function FormCliente () {
                     <h2> <span style={{color: 'darkgray'}}> Produto &nbsp;<Icon name='angle double right' size="small" /> </span> Cadastro</h2>
                 }
                 
-                { idProduto != undefined &&
+                { idProduto !== undefined &&
                     <h2> <span style={{color: 'darkgray'}}> Produto &nbsp;<Icon name='angle double right' size="small" /> </span> Alteração</h2>
                 }
 

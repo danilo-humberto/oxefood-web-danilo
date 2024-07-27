@@ -83,8 +83,6 @@ export default function FormCliente () {
 	
 		if (idEntregador != null) { //Alteração:
 
-console.log(entregadorRequest)
-
             axios.put("http://localhost:8080/api/entregador/" + idEntregador, entregadorRequest)
             .then((response) => { console.log('Entregador alterado com sucesso.') })
             .catch((error) => { console.log('Erro ao alterar um entregador.') })

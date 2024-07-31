@@ -55,8 +55,10 @@ export default function FormCliente() {
       dataNascimento: dataNascimento,
       foneCelular: foneCelular,
       foneFixo: foneFixo,
+      enderecos: endereco
     };
 
+    console.log(clienteRequest);
     if (idCliente != null) {
       //Alteração:
       axios
@@ -84,29 +86,14 @@ export default function FormCliente() {
 
   function enviarEnderecos(clienteID) {
     endereco.forEach(async (endereco) => {
-      await axios
-        .post(
-          "http://localhost:8080/api/cliente/endereco/" + clienteID,
-          endereco
-        )
-        .then(() => console.log("Endereço cadastrado com sucesso."))
-        .catch((error) => console.log("Erro ao cadastrar endereço.", error));
-    });
+      await axios.post("http://localhost:8080/api/cliente/endereco/" + clienteID, endereco)
+        .then(() => console.log("Endereços cadastrados com sucesso!"))
+        .catch((error) => console.log("Falha ao cadastrar os endereços", error))
+    })
   }
 
   function adicionarEndereco() {
-    setEndereco([
-      ...endereco,
-      {
-        rua: "",
-        numero: "",
-        cep: "",
-        bairro: "",
-        cidade: "",
-        estado: "",
-        complemento: "",
-      },
-    ]);
+    setEndereco([...endereco, { rua: "", numero: "", cep: "", bairro: "", cidade: "", estado: "", complemento: ""}]);
   }
 
   function atualizarEndereco(index, campo, valor) {
@@ -206,7 +193,7 @@ export default function FormCliente() {
                       fluid
                       label="Rua"
                       width={8}
-                      value={endereco.rua}
+                      value={address.rua}
                       onChange={(e) =>
                         atualizarEndereco(index, "rua", e.target.value)
                       }
@@ -216,7 +203,7 @@ export default function FormCliente() {
                       fluid
                       label="Numero"
                       width={6}
-                      value={endereco.numero}
+                      value={address.numero}
                       onChange={(e) =>
                         atualizarEndereco(index, "numero", e.target.value)
                       }
@@ -224,7 +211,7 @@ export default function FormCliente() {
                     <Form.Input fluid label="CEP" width={6}>
                       <InputMask
                         mask="99999-999"
-                        value={endereco.cep}
+                        value={address.cep}
                         onChange={(e) =>
                           atualizarEndereco(index, "cep", e.target.value)
                         }
@@ -237,7 +224,7 @@ export default function FormCliente() {
                       fluid
                       label="Bairro"
                       width={6}
-                      value={endereco.bairro}
+                      value={address.bairro}
                       onChange={(e) =>
                         atualizarEndereco(index, "bairro", e.target.value)
                       }
@@ -247,7 +234,7 @@ export default function FormCliente() {
                       fluid
                       label="Cidade"
                       width={6}
-                      value={endereco.cidade}
+                      value={address.cidade}
                       onChange={(e) =>
                         atualizarEndereco(index, "cidade", e.target.value)
                       }
@@ -257,7 +244,7 @@ export default function FormCliente() {
                       fluid
                       label="Estado"
                       width={6}
-                      value={endereco.estado}
+                      value={address.estado}
                       onChange={(e) =>
                         atualizarEndereco(index, "estado", e.target.value)
                       }
@@ -267,7 +254,7 @@ export default function FormCliente() {
                     required
                     fluid
                     label="Complemento"
-                    value={endereco.complemento}
+                    value={address.complemento}
                     onChange={(e) =>
                       atualizarEndereco(index, "complemento", e.target.value)
                     }

@@ -1,13 +1,27 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, Container, Divider, Icon, Table, Modal, Header } from "semantic-ui-react";
+import {
+  Button,
+  Container,
+  Divider,
+  Icon,
+  Table,
+  Modal,
+  Header,
+  Menu,
+  Segment,
+  Form,
+} from "semantic-ui-react";
 import MenuSistema from "../../MenuSistema";
 
 export default function ListCliente() {
   const [lista, setLista] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [idRemover, setIdRemover] = useState();
+  const [menuFiltro, setMenuFiltro] = useState();
+  const [cpf, setCpf] = useState();
+  const [nome, setNome] = useState();
 
   function confirmaRemover(id) {
     setOpenModal(true);
@@ -15,23 +29,20 @@ export default function ListCliente() {
   }
 
   async function remover() {
+    await axios
+      .delete("http://localhost:8080/api/cliente/" + idRemover)
+      .then((response) => {
+        console.log("Cliente removido com sucesso.");
 
-    await axios.delete('http://localhost:8080/api/cliente/' + idRemover)
-    .then((response) => {
-
-        console.log('Cliente removido com sucesso.')
-
-        axios.get("http://localhost:8080/api/cliente")
-        .then((response) => {
-            setLista(response.data)
-        })
-    })
-    .catch((error) => {
-        console.log('Erro ao remover um cliente.')
-    })
-    setOpenModal(false)
+        axios.get("http://localhost:8080/api/cliente").then((response) => {
+          setLista(response.data);
+        });
+      })
+      .catch((error) => {
+        console.log("Erro ao remover um cliente.");
+      });
+    setOpenModal(false);
   }
-
 
   useEffect(() => {
     carregarLista();
@@ -41,6 +52,42 @@ export default function ListCliente() {
     axios.get("http://localhost:8080/api/cliente").then((response) => {
       setLista(response.data);
     });
+  }
+
+  function handleMenuFiltro() {
+    if (menuFiltro === true) {
+      setMenuFiltro(false);
+    } else {
+      setMenuFiltro(true);
+    }
+  }
+
+  function handleChangeCpf(value) {
+    filtrarClientes(value, nome);
+  }
+
+  function handleChangeNome(value) {
+    filtrarClientes(cpf, value);
+  }
+
+  async function filtrarClientes(cpfParam, nomeParam) {
+    let formData = new FormData();
+
+    if (cpfParam !== undefined) {
+      setCpf(cpfParam);
+      formData.append("cpf", cpfParam);
+    }
+
+    if (nomeParam !== undefined) {
+      setNome(nomeParam);
+      formData.append("nome", nomeParam);
+    }
+
+    await axios
+      .post("http://localhost:8080/api/cliente/filtrar", formData)
+      .then((response) => {
+        setLista(response.data);
+      });
   }
 
   function formatarData(dataParam) {
@@ -61,6 +108,17 @@ export default function ListCliente() {
           <Divider />
 
           <div style={{ marginTop: "4%" }}>
+            <Menu compact>
+              <Menu.Item
+                name="menuFiltro"
+                active={menuFiltro === true}
+                onClick={() => handleMenuFiltro()}
+              >
+                <Icon name="filter" />
+                Filtrar
+              </Menu.Item>
+            </Menu>
+
             <Button
               label="Novo"
               circular
@@ -70,6 +128,33 @@ export default function ListCliente() {
               as={Link}
               to="/form-cliente"
             />
+
+            {menuFiltro ? (
+              <Segment>
+                <Form className="form-filtros"> 
+                  <Form.Group widths="equal">
+                    <Form.Input
+                      icon="search"
+                      value={cpf}
+                      onChange={(e) => handleChangeCpf(e.target.value)}
+                      label="CPF"
+                      placeholder="Filtrar por CPF"
+                      labelPosition="left"
+                    />
+                    <Form.Input
+                      icon="search"
+                      value={nome}
+                      onChange={(e) => handleChangeNome(e.target.value)}
+                      label="Nome"
+                      placeholder="Filtrar por Nome"
+                      labelPosition="left"
+                    />
+                  </Form.Group>
+                </Form>
+              </Segment>
+            ) : (
+              ""
+            )}
 
             <br />
             <br />

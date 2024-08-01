@@ -11,6 +11,12 @@ import {
 } from "semantic-ui-react";
 import MenuSistema from "../../MenuSistema";
 import { Link, useLocation } from "react-router-dom";
+import {
+  mensagemErro,
+  notifyError,
+  notifySuccess,
+  notifyWarn,
+} from "../../views/util/Util";
 
 export default function FormCliente() {
   const { state } = useLocation();
@@ -55,7 +61,7 @@ export default function FormCliente() {
       cpf: cpf,
       dataNascimento: dataNascimento,
       foneCelular: foneCelular,
-      foneFixo: foneFixo
+      foneFixo: foneFixo,
     };
 
     console.log(clienteRequest);
@@ -64,10 +70,14 @@ export default function FormCliente() {
       axios
         .put("http://localhost:8080/api/cliente/" + idCliente, clienteRequest)
         .then((response) => {
-          console.log("Cliente alterado com sucesso.");
+          notifySuccess("Cliente alterado com sucesso.");
         })
         .catch((error) => {
-          console.log("Erro ao alter um cliente.");
+          if (error.response) {
+            notifyError(error.response.data.message);
+          } else {
+            notifyError(mensagemErro);
+          }
         });
     } else {
       //Cadastro:
@@ -76,10 +86,14 @@ export default function FormCliente() {
         .then((response) => {
           let clienteID = response.data.id;
           enviarEnderecos(clienteID);
-          console.log("Cliente cadastrado com sucesso.");
+          notifySuccess("Cliente cadastrado com sucesso.");
         })
         .catch((error) => {
-          console.log("Erro ao incluir o cliente.");
+          if (error.response) {
+            notifyError(error.response.data.message);
+          } else {
+            notifyError(mensagemErro);
+          }
         });
     }
   }
@@ -89,19 +103,37 @@ export default function FormCliente() {
       // Verifica se o estado 'endereco' está definido
       if (endereco && endereco.length > 0) {
         for (const addr of endereco) {
-          await axios.post("http://localhost:8080/api/cliente/endereco/" + clienteID, addr);
+          await axios.post(
+            "http://localhost:8080/api/cliente/endereco/" + clienteID,
+            addr
+          );
         }
-        console.log("Todos os endereços foram cadastrados com sucesso.");
+        notifySuccess("Todos os endereços foram cadastrados com sucesso.");
       } else {
-        console.log("Nenhum endereço para cadastrar.");
+        notifyWarn("Nenhum endereço para cadastrar.");
       }
     } catch (error) {
-      console.log("Erro ao cadastrar endereços", error);
+      if (error.response) {
+        notifyError(error.response.data.message);
+      } else {
+        notifyError(mensagemErro);
+      }
     }
   }
 
   function adicionarEndereco() {
-    setEndereco([...endereco, { rua: "", numero: "", cep: "", bairro: "", cidade: "", estado: "", complemento: ""}]);
+    setEndereco([
+      ...endereco,
+      {
+        rua: "",
+        numero: "",
+        cep: "",
+        bairro: "",
+        cidade: "",
+        estado: "",
+        complemento: "",
+      },
+    ]);
   }
 
   function atualizarEndereco(index, campo, valor) {

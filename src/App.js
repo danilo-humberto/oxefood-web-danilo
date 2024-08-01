@@ -1,13 +1,13 @@
 import { Segment } from 'semantic-ui-react';
 import './App.css';
-import FormCliente from './views/client/FormCliente';
-import FormProduct from './views/product/FormProduct';
-import FormEntregador from './views/entregador/FormEntregador'
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import Rotas from './Rotas';
 
 function App() {
   return (
     <div className="App">
+      <ToastContainer />
       <Rotas />
 
       <div style={{marginTop: '6%'}}>

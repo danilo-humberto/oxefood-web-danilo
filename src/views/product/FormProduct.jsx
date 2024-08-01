@@ -10,6 +10,12 @@ import {
 import axios from "axios";
 import MenuSistema from "../../MenuSistema";
 import { Link, useLocation } from "react-router-dom";
+import {
+  mensagemErro,
+  notifyError,
+  notifySuccess,
+  notifyWarn,
+} from "../../views/util/Util";
 
 export default function FormCliente() {
   const { state } = useLocation();
@@ -64,21 +70,29 @@ export default function FormCliente() {
       //Alteração:
       axios
         .put("http://localhost:8080/api/produto/" + idProduto, produtoRequest)
-        .then((response) => {
-          console.log("Produto alterado com sucesso.");
+        .then(() => {
+          notifySuccess("Produto alterado com sucesso.");
         })
         .catch((error) => {
-          console.log("Erro ao alterar um produto.");
+          if (error.response) {
+            notifyError(error.response.data.message);
+          } else {
+            notifyError(mensagemErro);
+          }
         });
     } else {
       //Cadastro:
       axios
         .post("http://localhost:8080/api/produto", produtoRequest)
-        .then((response) => {
-          console.log("Produto cadastrado com sucesso.");
+        .then(() => {
+          notifySuccess("Produto cadastrado com sucesso.");
         })
         .catch((error) => {
-          console.log("Erro ao incluir o produto.");
+          if (error.response) {
+            notifyError(error.response.data.message);
+          } else {
+            notifyError(mensagemErro);
+          }
         });
     }
   }

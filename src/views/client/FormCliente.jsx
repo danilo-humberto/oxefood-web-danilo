@@ -50,12 +50,12 @@ export default function FormCliente() {
 
   function salvar() {
     let clienteRequest = {
+      enderecos: endereco,
       nome: nome,
       cpf: cpf,
       dataNascimento: dataNascimento,
       foneCelular: foneCelular,
-      foneFixo: foneFixo,
-      enderecos: endereco
+      foneFixo: foneFixo
     };
 
     console.log(clienteRequest);
@@ -84,12 +84,20 @@ export default function FormCliente() {
     }
   }
 
-  function enviarEnderecos(clienteID) {
-    endereco.forEach(async (endereco) => {
-      await axios.post("http://localhost:8080/api/cliente/endereco/" + clienteID, endereco)
-        .then(() => console.log("Endereços cadastrados com sucesso!"))
-        .catch((error) => console.log("Falha ao cadastrar os endereços", error))
-    })
+  async function enviarEnderecos(clienteID) {
+    try {
+      // Verifica se o estado 'endereco' está definido
+      if (endereco && endereco.length > 0) {
+        for (const addr of endereco) {
+          await axios.post("http://localhost:8080/api/cliente/endereco/" + clienteID, addr);
+        }
+        console.log("Todos os endereços foram cadastrados com sucesso.");
+      } else {
+        console.log("Nenhum endereço para cadastrar.");
+      }
+    } catch (error) {
+      console.log("Erro ao cadastrar endereços", error);
+    }
   }
 
   function adicionarEndereco() {
